@@ -1,4 +1,26 @@
-date,floating_rate_pct,fixed_2yr_rate_pct,frequency,source
-# Empty intentionally — populate from RBNZ table B3.
-# Source page: https://www.rbnz.govt.nz/statistics/series/exchange-and-interest-rates/retail-interest-rates-on-lending-and-deposits
-# Coverage available from RBNZ B3: June 1998 onwards.
+year,floating_rate_pct,fixed_2yr_rate_pct,source
+1998,8.41,8.66,RBNZ B3
+1999,6.49,7.48,RBNZ B3
+2000,8.25,8.22,RBNZ B3
+2001,7.56,7.62,RBNZ B3
+2002,7.18,7.17,RBNZ B3
+2003,7.11,7.00,RBNZ B3
+2004,8.13,7.77,RBNZ B3
+2005,9.25,8.28,RBNZ B3
+2006,9.73,8.35,RBNZ B3
+2007,10.07,9.04,RBNZ B3
+2008,9.97,8.67,RBNZ B3
+2009,6.02,6.42,RBNZ B3
+2010,5.85,6.52,RBNZ B3
+2011,5.78,6.09,RBNZ B3
+2012,5.52,5.44,RBNZ B3
+2013,5.55,5.18,RBNZ B3
+2014,6.10,5.88,RBNZ B3
+2015,5.82,5.19,RBNZ B3
+2016,5.28,4.52,RBNZ B3
+2017,5.66,4.71,RBNZ B3
+2018,5.80,5.14,RBNZ B3
+2019,5.79,4.99,RBNZ B3
+2020,3.79,3.30,RBNZ B3
+2021,3.50,3.16,RBNZ B3
+2022,5.18,4.93,RBNZ B3
