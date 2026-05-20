@@ -1,0 +1,4 @@
+date,floating_rate_pct,fixed_2yr_rate_pct,frequency,source
+# Empty intentionally — populate from RBNZ table B3.
+# Source page: https://www.rbnz.govt.nz/statistics/series/exchange-and-interest-rates/retail-interest-rates-on-lending-and-deposits
+# Coverage available from RBNZ B3: June 1998 onwards.

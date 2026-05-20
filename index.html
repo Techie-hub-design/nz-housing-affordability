@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NZ Housing Affordability — Project Shell</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --rule: #d8d3c8;
+    --accent: #c45a2c;
+    --accent2: #2a5d6b;
+    --panel: #fffcf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 48px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .stamp {
+    display: inline-block;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .lede { color: var(--muted); font-size: 17px; max-width: 720px; margin-bottom: 40px; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .panel-label {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  h2 { font-size: 22px; font-weight: 400; margin-bottom: 8px; }
+  h2 + p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .status {
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 3px;
+    margin-bottom: 16px;
+    background: #1a1a1a;
+    color: #9ee99e;
+  }
+  .status.warn { background: #2d2a1f; color: #f0c674; }
+  .chart-wrap { height: 380px; position: relative; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 48px; text-align: center; }
+  code { font-family: ui-monospace, monospace; font-size: 13px; background: rgba(0,0,0,0.04); padding: 2px 5px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="stamp">Project Shell · v0.1 · Real data</div>
+<h1>NZ Housing <em>Affordability</em></h1>
+<p class="lede">
+  Real BIS household-debt data for New Zealand, 1990–2025. Chart renders directly from embedded values —
+  no server needed. The mortgage-rate chart fills in once <code>data/mortgage_rates.csv</code> is populated.
+</p>
+
+<div class="panel">
+  <div class="panel-label">Wiring Test · Chart.js + real BIS data</div>
+  <h2>Household debt as % of GDP — annual, 1990–2025</h2>
+  <p>Real values from FRED series <code>QNZHAM770A</code> (BIS Total Credit to Households, % of GDP, annualised).</p>
+  <div id="status" class="status">▸ rendering…</div>
+  <div class="chart-wrap"><canvas id="chartDebt"></canvas></div>
+</div>
+
+<div class="panel">
+  <div class="panel-label">Pending · data/mortgage_rates.csv</div>
+  <h2>Mortgage rates — annual, 1998–present</h2>
+  <p>Once <code>data/mortgage_rates.csv</code> is populated with real RBNZ B3 data, a second chart will be added here.</p>
+</div>
+
+<footer>
+  Data source: FRED <code>QNZHAM770A</code> (Bank for International Settlements) · 36 annual observations
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────
+  // Real BIS household debt data, annual mean of calendar quarters
+  // Source: FRED series QNZHAM770A
+  // Mirrors data/household_debt.csv — embedded here so the page works
+  // when opened directly via file:// (no HTTP server needed)
+  // ─────────────────────────────────────────────────────────────────
+  const HOUSEHOLD_DEBT = [
+    { year: 1990, value: 27.9 },   // partial (Q4 only)
+    { year: 1991, value: 30.1 },
+    { year: 1992, value: 34.0 },
+    { year: 1993, value: 37.23 },
+    { year: 1994, value: 40.23 },
+    { year: 1995, value: 43.8 },
+    { year: 1996, value: 48.75 },
+    { year: 1997, value: 53.1 },
+    { year: 1998, value: 56.3 },
+    { year: 1999, value: 59.9 },
+    { year: 2000, value: 61.45 },
+    { year: 2001, value: 62.1 },
+    { year: 2002, value: 63.45 },
+    { year: 2003, value: 68.18 },
+    { year: 2004, value: 73.4 },
+    { year: 2005, value: 79.83 },
+    { year: 2006, value: 86.2 },
+    { year: 2007, value: 90.78 },
+    { year: 2008, value: 91.63 },
+    { year: 2009, value: 92.85 },
+    { year: 2010, value: 91.33 },
+    { year: 2011, value: 88.33 },
+    { year: 2012, value: 87.1 },
+    { year: 2013, value: 88.75 },
+    { year: 2014, value: 87.15 },
+    { year: 2015, value: 88.75 },
+    { year: 2016, value: 91.18 },
+    { year: 2017, value: 91.5 },
+    { year: 2018, value: 90.83 },
+    { year: 2019, value: 91.55 },
+    { year: 2020, value: 94.5 },
+    { year: 2021, value: 97.55 },
+    { year: 2022, value: 95.5 },
+    { year: 2023, value: 90.55 },
+    { year: 2024, value: 89.58 },
+    { year: 2025, value: 90.37 },  // partial (3/4 quarters)
+  ];
+
+  const status = document.getElementById('status');
+
+  new Chart(document.getElementById('chartDebt').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: HOUSEHOLD_DEBT.map(r => r.year),
+      datasets: [{
+        label: 'Household debt (% of GDP)',
+        data: HOUSEHOLD_DEBT.map(r => r.value),
+        borderColor: '#c45a2c',
+        backgroundColor: 'rgba(196, 90, 44, 0.08)',
+        borderWidth: 2.5,
+        pointRadius: 2,
+        pointHoverRadius: 6,
+        tension: 0.25,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { family: 'Georgia, serif', size: 13 } } },
+        tooltip: { callbacks: { label: c => `${c.raw}% of GDP` } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { maxTicksLimit: 12 } },
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + '%' }, beginAtZero: false }
+      }
+    }
+  });
+
+  status.textContent = `✓ ${HOUSEHOLD_DEBT.length} annual rows · FRED QNZHAM770A · 1990–2025`;
+</script>
+</body>
+</html>

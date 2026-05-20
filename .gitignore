@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Common build / temp
+*.log
+.cache/
+dist/
+node_modules/
+__pycache__/
+.venv/
+venv/
+
+# Raw downloads (used as parsing input, not committed)
+data/hb3.xlsx
+data/*.zip
